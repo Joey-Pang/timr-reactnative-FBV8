@@ -6,21 +6,44 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { auth } from "../firebase";
+import { useNavigation } from "@react-navigation/core";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigation.navigate("Home");
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   const handleSignup = () => {
     auth
-      .createUserWithEmailAndPassword(email, password)
+      .createUserWithEmailAndPassword(email.trim(), password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        console.log(user.email);
+        console.log("Registered with", user.email);
       })
       .catch((error) => alert(error.message)); //brackets added to error
+  };
+
+  const handleLogin = () => {
+    auth
+      .signInWithEmailAndPassword(email.trim(), password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log("Logged in with:", user.email);
+      })
+      .catch((error) => alert(error.message));
   };
 
   return (
@@ -43,7 +66,7 @@ const LoginPage = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => {}} style={styles.button}>
+        <TouchableOpacity onPress={handleLogin} style={styles.button}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
 

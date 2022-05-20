@@ -54,7 +54,7 @@ function Todolist() {
 
         <TouchableOpacity onPress={() => handleAddTask()}>
           <View style={styles.addWrapper}>
-            <Text styles={styles.addText}>👌</Text>
+            <Text styles={styles.addText}>😭</Text>
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
