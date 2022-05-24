@@ -3,7 +3,7 @@ import { Button, Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { auth } from "../firebase";
 import { useNavigation } from "@react-navigation/core";
 
-function Homepage() {
+function Dashboard() {
   const navigation = useNavigation();
 
   const handleSignOut = () => {
@@ -25,7 +25,7 @@ function Homepage() {
   );
 }
 
-export default Homepage;
+export default Dashboard;
 
 const styles = StyleSheet.create({
   container: {
