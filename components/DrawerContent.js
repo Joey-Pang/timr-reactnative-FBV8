@@ -24,12 +24,21 @@ function CustomDrawerContent(props) {
   };
 
   return (
-    <DrawerContentScrollView key={props}>
-      <DrawerItemList {...props} />
-      <TouchableOpacity style={styles.button} onPress={handleSignOut}>
-        <Text style={styles.buttonText}>Logout</Text>
-      </TouchableOpacity>
-    </DrawerContentScrollView>
+    <View style={{flex: 1}}>
+      <DrawerContentScrollView {...props}>
+          <DrawerItemList {...props} />
+      </DrawerContentScrollView>
+
+
+      <View>
+        <TouchableOpacity style={styles.button} onPress={handleSignOut}>
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+
+
+
   );
 }
 
@@ -39,12 +48,11 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#FF5B5B",
     width: "90%",
+    height: 51,
     padding: 15,
     borderRadius: 6,
-    position: "relative",
-    // alignItems: "center",
-    marginTop: 425,
     marginLeft: 10,
+    marginBottom:10,
   },
   buttonText: {
     color: "white",
