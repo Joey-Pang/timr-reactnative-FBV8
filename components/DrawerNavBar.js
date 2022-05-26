@@ -2,10 +2,16 @@ import "react-native-gesture-handler";
 import * as React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
+import Anticons from "react-native-vector-icons/AntDesign";
+import Maticons from "react-native-vector-icons/MaterialCommunityIcons";
+import Ionicons from "react-native-vector-icons/Ionicons";
+
 import LoginPage from "../pages/LoginPage";
 import Dashboard from "../pages/Dashboard";
 import Todolist from "../pages/Todolist";
 import Calendar from "../pages/Calendar";
+import Profile from "../pages/Profile";
+import Settings from "../pages/Settings";
 
 import CustomDrawerContent from "./DrawerContent";
 
@@ -14,9 +20,15 @@ const Drawer = createDrawerNavigator();
 function DrawerNavBar() {
   return (
     <Drawer.Navigator
-      useLegacyImplementation
       initialRouteName="Login"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{
+        drawerLabelStyle: {
+          color: "#565656",
+          marginLeft: -25,
+          fontSize: 15,
+        },
+      }}
     >
       <Drawer.Screen
         name="Login"
@@ -29,27 +41,61 @@ function DrawerNavBar() {
         }}
       />
       <Drawer.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          drawerActiveBackgroundColor: "#FFE9BE",
+          drawerActiveTintColor: "#FFF",
+
+          drawerIcon: (color) => (
+            <Anticons name="user" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
         name="Dashboard"
         component={Dashboard}
         options={{
-          drawerActiveTintColor: "#50C0FF",
-          drawerLabelStyle: { color: "#565656" },
+          drawerActiveBackgroundColor: "#D7FFBE",
+          drawerActiveTintColor: "#FFF",
+
+          drawerIcon: (color) => (
+            <Anticons name="home" size={22} color={color} />
+          ),
         }}
       />
       <Drawer.Screen
         name="Todo"
         component={Todolist}
         options={{
-          drawerActiveTintColor: "#FFD37D",
-          drawerLabelStyle: { color: "#565656" },
+          drawerActiveBackgroundColor: "#BEE8FF",
+          drawerActiveTintColor: "#FFF",
+
+          drawerIcon: (color) => (
+            <Maticons name="playlist-edit" size={22} color={color} />
+          ),
         }}
       />
       <Drawer.Screen
         name="Calendar"
         component={Calendar}
         options={{
-          drawerActiveTintColor: "#9CFF5F",
-          drawerLabelStyle: { color: "#565656" },
+          drawerActiveBackgroundColor: "#E3C8FF",
+          drawerActiveTintColor: "#FFF",
+          drawerIcon: (color) => (
+            <Anticons name="calendar" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          drawerActiveBackgroundColor: "#FF8C8C",
+          drawerActiveTintColor: "#FFF",
+          drawerIcon: (color) => (
+            <Ionicons name="settings-outline" size={22} color={color} />
+          ),
         }}
       />
     </Drawer.Navigator>

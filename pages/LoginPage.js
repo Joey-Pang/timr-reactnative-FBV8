@@ -5,6 +5,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { auth } from "../firebase";
@@ -47,7 +48,12 @@ const LoginPage = () => {
   };
 
   return (
+
     <KeyboardAvoidingView style={styles.container} behavior="padding ">
+      <View style={styles.imagecontainer}>
+        <Image source={require('../images/big-timr-logo.png')} style={styles.image}/>
+      </View>
+
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
@@ -78,6 +84,7 @@ const LoginPage = () => {
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
+
   );
 };
 
@@ -88,6 +95,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  imagecontainer:{
+    marginTop: -15,
+    paddingBottom: 50,
+  },
+  image:{
+    height: 205,
+    width: 290,
+    resizeMode: 'contain',
   },
   inputContainer: {
     width: "60%",
