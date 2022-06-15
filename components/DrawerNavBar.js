@@ -9,7 +9,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import LoginPage from "../pages/LoginPage";
 import Dashboard from "../pages/Dashboard";
 import Todolist from "../pages/Todolist";
-import Calendar from "../pages/Calendar";
+import Calendarpage from "../pages/Calendar";
 import Profile from "../pages/Profile";
 import Settings from "../pages/Settings";
 
@@ -78,23 +78,13 @@ function DrawerNavBar() {
       />
       <Drawer.Screen
         name="Calendar"
-        component={Calendar}
+        component={Calendarpage}
         options={{
+          headerShown: false,
           drawerActiveBackgroundColor: "#E3C8FF",
           drawerActiveTintColor: "#FFF",
           drawerIcon: (color) => (
             <Anticons name="calendar" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Settings"
-        component={Settings}
-        options={{
-          drawerActiveBackgroundColor: "#FF8C8C",
-          drawerActiveTintColor: "#FFF",
-          drawerIcon: (color) => (
-            <Ionicons name="settings-outline" size={22} color={color} />
           ),
         }}
       />

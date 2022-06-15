@@ -43,7 +43,7 @@ function CustomDrawerContent(props) {
         />
       </View>
 
-      <DrawerContentScrollView {...props}>
+      <DrawerContentScrollView {...props} style={{ marginTop: -25 }}>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
 
@@ -60,13 +60,13 @@ export default CustomDrawerContent;
 
 const styles = StyleSheet.create({
   textimage: {
-    marginTop: 20,
+    marginTop: 35,
     marginLeft: 13,
     width: "40%",
   },
   texticon: {
     marginLeft: 5,
-    marginTop: 10,
+    marginTop: 27,
     height: 45,
     width: 45,
   },
