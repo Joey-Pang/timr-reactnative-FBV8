@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import { auth } from "../firebase";
+import { auth } from "../config";
 import { useNavigation } from "@react-navigation/core";
 
 function Dashboard() {

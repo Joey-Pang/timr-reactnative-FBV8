@@ -16,7 +16,7 @@ import {
   Image,
 } from "react-native";
 
-import { auth } from "../firebase";
+import { auth } from "../config";
 
 function CustomDrawerContent(props) {
   const navigation = useNavigation();

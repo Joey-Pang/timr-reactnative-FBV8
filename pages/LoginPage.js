@@ -8,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { auth } from "../firebase";
+import { auth } from "../config";
 import { useNavigation } from "@react-navigation/core";
 
 const LoginPage = () => {
@@ -48,10 +48,12 @@ const LoginPage = () => {
   };
 
   return (
-
     <KeyboardAvoidingView style={styles.container} behavior="padding ">
       <View style={styles.imagecontainer}>
-        <Image source={require('../images/big-timr-logo.png')} style={styles.image}/>
+        <Image
+          source={require("../images/big-timr-logo.png")}
+          style={styles.image}
+        />
       </View>
 
       <View style={styles.inputContainer}>
@@ -84,7 +86,6 @@ const LoginPage = () => {
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
-
   );
 };
 
@@ -96,14 +97,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  imagecontainer:{
+  imagecontainer: {
     marginTop: -15,
     paddingBottom: 50,
   },
-  image:{
+  image: {
     height: 205,
     width: 290,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   inputContainer: {
     width: "60%",
