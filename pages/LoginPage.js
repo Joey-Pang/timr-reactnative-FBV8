@@ -10,6 +10,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { auth } from "../config";
 import { useNavigation } from "@react-navigation/core";
+import { firebase } from "../config";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -42,14 +43,40 @@ const LoginPage = () => {
     navigation.navigate("Register");
   };
 
+  // const onLoginPress = () => {
+  //   auth
+  //     .signInWithEmailAndPassword(email.trim(), password)
+  //     .then((userCredentials) => {
+  //       const user = userCredentials.user;
+  //       console.log("Logged in with:", user.email);
+  //     })
+  //     .catch((error) => alert(error.message));
+  // };
+
   const onLoginPress = () => {
     auth
-      .signInWithEmailAndPassword(email.trim(), password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log("Logged in with:", user.email);
+      .signInWithEmailAndPassword(email, password)
+      .then((response) => {
+        const uid = response.user.uid;
+        const usersRef = firebase.firestore().collection("users");
+        usersRef
+          .doc(uid)
+          .get()
+          .then((firestoreDocument) => {
+            if (!firestoreDocument.exists) {
+              alert("User does not exist anymore.");
+              return;
+            }
+            const user = firestoreDocument.data();
+            navigation.navigate("Dashboard", { user });
+          })
+          .catch((error) => {
+            alert(error);
+          });
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => {
+        alert(error);
+      });
   };
 
   return (
@@ -67,6 +94,7 @@ const LoginPage = () => {
           value={email}
           onChangeText={(text) => setEmail(text)}
           style={styles.input}
+          autoCapitalize="none"
         ></TextInput>
 
         <TextInput
@@ -74,6 +102,7 @@ const LoginPage = () => {
           value={password}
           onChangeText={(text) => setPassword(text)}
           style={styles.input}
+          autoCapitalize="none"
           secureTextEntry
         ></TextInput>
       </View>
