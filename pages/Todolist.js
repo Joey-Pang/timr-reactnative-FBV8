@@ -1,63 +1,98 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
+  FlatList,
+  Keyboard,
   Text,
-  View,
-  KeyboardAvoidingView,
   TextInput,
   TouchableOpacity,
-  Keyboard,
+  View,
+  StyleSheet,
 } from "react-native";
-import Task from "../components/Task";
+import { auth } from "../config";
 
-function Todolist() {
-  const [task, setTask] = useState();
-  const [taskItems, setTaskItems] = useState([]);
+export default function HomeScreen(props) {
+  const [entityText, setEntityText] = useState("");
+  const [entities, setEntities] = useState([]);
 
-  const handleAddTask = () => {
-    Keyboard.dismiss();
-    setTaskItems([...taskItems, task]);
-    setTask(null);
+  const entityRef = auth.firestore().collection("entities");
+  const userID = props.extraData.id;
+
+  useEffect(() => {
+    entityRef
+      .where("authorID", "==", userID)
+      .orderBy("createdAt", "desc")
+      .onSnapshot(
+        (querySnapshot) => {
+          const newEntities = [];
+          querySnapshot.forEach((doc) => {
+            const entity = doc.data();
+            entity.id = doc.id;
+            newEntities.push(entity);
+          });
+          setEntities(newEntities);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }, []);
+
+  const onAddButtonPress = () => {
+    if (entityText && entityText.length > 0) {
+      const timestamp = auth.firestore.FieldValue.serverTimestamp();
+      const data = {
+        text: entityText,
+        authorID: userID,
+        createdAt: timestamp,
+      };
+      entityRef
+        .add(data)
+        .then((_doc) => {
+          setEntityText("");
+          Keyboard.dismiss();
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    }
   };
 
-  const completeTask = (index) => {
-    let itemsCopy = [...taskItems];
-    itemsCopy.splice(index, 1);
-    setTaskItems(itemsCopy);
+  const renderEntity = ({ item, index }) => {
+    return (
+      <View style={styles.entityContainer}>
+        <Text style={styles.entityText}>
+          {index}. {item.text}
+        </Text>
+      </View>
+    );
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.tasksWrapper}>
-        <View style={styles.items}>
-          {/* This is where the tasks would go */}
-          {taskItems.map((item, index) => {
-            return (
-              <TouchableOpacity key={index} onPress={() => completeTask(index)}>
-                <Task text={item} />
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </View>
-
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-        style={styles.writeTaskWrapper}
-      >
+      <View style={styles.formContainer}>
         <TextInput
           style={styles.input}
-          placeholder={"Write a task"}
-          value={task}
-          onChangeText={(text) => setTask(text)}
+          placeholder="Add new entity"
+          placeholderTextColor="#aaaaaa"
+          onChangeText={(text) => setEntityText(text)}
+          value={entityText}
+          underlineColorAndroid="transparent"
+          autoCapitalize="none"
         />
-
-        <TouchableOpacity onPress={() => handleAddTask()}>
-          <View style={styles.addWrapper}>
-            <Text styles={styles.addText}>😭</Text>
-          </View>
+        <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
+          <Text style={styles.buttonText}>Add</Text>
         </TouchableOpacity>
-      </KeyboardAvoidingView>
+      </View>
+      {entities && (
+        <View style={styles.listContainer}>
+          <FlatList
+            data={entities}
+            renderItem={renderEntity}
+            keyExtractor={(item) => item.id}
+            removeClippedSubviews={true}
+          />
+        </View>
+      )}
     </View>
   );
 }
@@ -65,49 +100,54 @@ function Todolist() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#c7c7c7",
+    alignItems: "center",
   },
-  tasksWrapper: {
-    paddingTop: 80,
-    paddingHorizontal: 20,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    padding: 10,
-  },
-  items: {
-    marginTop: 30,
-  },
-  writeTaskWrapper: {
-    position: "absolute",
-    bottom: 60,
-    width: "100%",
+  formContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    height: 80,
+    marginTop: 40,
+    marginBottom: 20,
+    flex: 1,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    justifyContent: "center",
     alignItems: "center",
   },
   input: {
-    paddingVertical: 15,
-    paddingHorizontal: 15,
+    height: 48,
+    borderRadius: 5,
+    overflow: "hidden",
     backgroundColor: "white",
-    borderRadius: 60,
-    borderColor: "#C0C0C0",
-    borderWidth: 1,
-    maxWidth: 250,
-    width: 250,
+    paddingLeft: 16,
+    flex: 1,
+    marginRight: 5,
   },
-  addWrapper: {
-    width: 60,
-    height: 60,
-    backgroundColor: "white",
-    borderRadius: 60,
-    justifyContent: "center",
+  button: {
+    height: 47,
+    borderRadius: 5,
+    backgroundColor: "#788eec",
+    width: 80,
     alignItems: "center",
-    borderColor: "#C0C0C0",
-    borderWidth: 1,
+    justifyContent: "center",
   },
-  addText: {},
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+  },
+  listContainer: {
+    marginTop: 20,
+    padding: 20,
+  },
+  entityContainer: {
+    marginTop: 16,
+    borderBottomColor: "#cccccc",
+    borderBottomWidth: 1,
+    paddingBottom: 16,
+  },
+  entityText: {
+    fontSize: 20,
+    color: "#333333",
+  },
 });
-
-export default Todolist;

@@ -8,7 +8,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import LoginPage from "../pages/LoginPage";
 import Dashboard from "../pages/Dashboard";
-import Todolist from "../pages/Todolist";
+import Todos from "../pages/Todolist";
 import Calendarpage from "../pages/Calendar";
 import Profile from "../pages/Profile";
 import Settings from "../pages/Settings";
@@ -66,7 +66,7 @@ function DrawerNavBar() {
       />
       <Drawer.Screen
         name="Todo"
-        component={Todolist}
+        component={Todos}
         options={{
           drawerActiveBackgroundColor: "#BEE8FF",
           drawerActiveTintColor: "#FFF",
