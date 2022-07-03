@@ -7,6 +7,7 @@ import Maticons from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
 import Dashboard from "../pages/Dashboard";
 import Todos from "../pages/Todolist";
 import Calendarpage from "../pages/Calendar";
@@ -33,6 +34,16 @@ function DrawerNavBar() {
       <Drawer.Screen
         name="Login"
         component={LoginPage}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+          swipeEnabled: false,
+          drawerItemStyle: { display: "none" },
+        }}
+      />
+      <Drawer.Screen
+        name="Register"
+        component={RegisterPage}
         options={{
           headerShown: false,
           gestureEnabled: false,

@@ -10,22 +10,19 @@ import {
 import React, { useState, useEffect } from "react";
 import { auth } from "../config";
 import { useNavigation } from "@react-navigation/core";
+import { firebase } from "../config";
 
-const LoginPage = () => {
+const RegisterPage = () => {
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.navigate("Dashboard");
-      }
-    });
-
-    return unsubscribe;
-  }, []);
+  const onFooterLinkPress = () => {
+    navigation.navigate("Login");
+  };
 
   // const handleSignup = () => {
   //   auth
@@ -38,18 +35,34 @@ const LoginPage = () => {
 
   // };
 
-  const onFooterLinkPress = () => {
-    navigation.navigate("Register");
-  };
-
-  const onLoginPress = () => {
+  const onRegisterPress = () => {
+    if (password !== confirmPassword) {
+      alert("Passwords don't match.");
+      return;
+    }
     auth
-      .signInWithEmailAndPassword(email.trim(), password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log("Logged in with:", user.email);
+      .createUserWithEmailAndPassword(email, password)
+      .then((response) => {
+        const uid = response.user.uid;
+        const data = {
+          id: uid,
+          email,
+          fullName,
+        };
+        const usersRef = firebase.firestore().collection("users");
+        usersRef
+          .doc(uid)
+          .set(data)
+          .then(() => {
+            navigation.navigate("Dashboard", { user: data });
+          })
+          .catch((error) => {
+            alert(error);
+          });
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => {
+        alert(error);
+      });
   };
 
   return (
@@ -63,10 +76,19 @@ const LoginPage = () => {
 
       <View style={styles.inputContainer}>
         <TextInput
+          placeholder="Full Name"
+          value={fullName}
+          onChangeText={(text) => setFullName(text)}
+          style={styles.input}
+          autoCapitalize="none"
+        ></TextInput>
+
+        <TextInput
           placeholder="Email"
           value={email}
           onChangeText={(text) => setEmail(text)}
           style={styles.input}
+          autoCapitalize="none"
         ></TextInput>
 
         <TextInput
@@ -75,26 +97,36 @@ const LoginPage = () => {
           onChangeText={(text) => setPassword(text)}
           style={styles.input}
           secureTextEntry
+          autoCapitalize="none"
+        ></TextInput>
+
+        <TextInput
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChangeText={(text) => setConfirmPassword(text)}
+          style={styles.input}
+          secureTextEntry
+          autoCapitalize="none"
         ></TextInput>
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={onLoginPress} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
+        <TouchableOpacity onPress={onRegisterPress} style={styles.button}>
+          <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={onFooterLinkPress}
           style={[styles.button, styles.buttonOutline]}
         >
-          <Text style={styles.buttonOutlineText}>Register</Text>
+          <Text style={styles.buttonOutlineText}>Already a User?</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
 
 const styles = StyleSheet.create({
   container: {
