@@ -8,14 +8,14 @@ import {
   View,
   StyleSheet,
 } from "react-native";
-import { auth } from "../config";
+import { auth, firebase } from "../config";
 
-export default function HomeScreen(props) {
+const Todos = (props) => {
   const [entityText, setEntityText] = useState("");
   const [entities, setEntities] = useState([]);
 
-  const entityRef = auth.firestore().collection("entities");
-  const userID = props.extraData.id;
+  const entityRef = firebase.firestore().collection("entities");
+  const userID = firebase.auth().currentUser.uid;
 
   useEffect(() => {
     entityRef
@@ -39,7 +39,7 @@ export default function HomeScreen(props) {
 
   const onAddButtonPress = () => {
     if (entityText && entityText.length > 0) {
-      const timestamp = auth.firestore.FieldValue.serverTimestamp();
+      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
       const data = {
         text: entityText,
         authorID: userID,
@@ -95,7 +95,9 @@ export default function HomeScreen(props) {
       )}
     </View>
   );
-}
+};
+
+export default Todos;
 
 const styles = StyleSheet.create({
   container: {

@@ -78,6 +78,7 @@ function DrawerNavBar() {
       <Drawer.Screen
         name="Todo"
         component={Todos}
+        drawerContent={(props) => <TodoScreen {...props} extraData={user} />}
         options={{
           drawerActiveBackgroundColor: "#BEE8FF",
           drawerActiveTintColor: "#FFF",
