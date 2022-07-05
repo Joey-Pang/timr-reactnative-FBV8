@@ -3,7 +3,9 @@
     "appspot",
     "Evvdrs",
     "firebaseapp",
+    "imagecontainer",
     "reactnative",
-    "Todolist"
+    "Todolist",
+    "todos"
   ]
 }

@@ -7,9 +7,10 @@ import Maticons from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
 import Dashboard from "../pages/Dashboard";
-import Todolist from "../pages/Todolist";
-import Calendar from "../pages/Calendar";
+import Todos from "../pages/Todolist";
+import Calendarpage from "../pages/Calendar";
 import Profile from "../pages/Profile";
 import Settings from "../pages/Settings";
 
@@ -33,6 +34,16 @@ function DrawerNavBar() {
       <Drawer.Screen
         name="Login"
         component={LoginPage}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+          swipeEnabled: false,
+          drawerItemStyle: { display: "none" },
+        }}
+      />
+      <Drawer.Screen
+        name="Register"
+        component={RegisterPage}
         options={{
           headerShown: false,
           gestureEnabled: false,
@@ -66,7 +77,8 @@ function DrawerNavBar() {
       />
       <Drawer.Screen
         name="Todo"
-        component={Todolist}
+        component={Todos}
+        drawerContent={(props) => <TodoScreen {...props} extraData={user} />}
         options={{
           drawerActiveBackgroundColor: "#BEE8FF",
           drawerActiveTintColor: "#FFF",
@@ -78,23 +90,13 @@ function DrawerNavBar() {
       />
       <Drawer.Screen
         name="Calendar"
-        component={Calendar}
+        component={Calendarpage}
         options={{
+          headerShown: false,
           drawerActiveBackgroundColor: "#E3C8FF",
           drawerActiveTintColor: "#FFF",
           drawerIcon: (color) => (
             <Anticons name="calendar" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Settings"
-        component={Settings}
-        options={{
-          drawerActiveBackgroundColor: "#FF8C8C",
-          drawerActiveTintColor: "#FFF",
-          drawerIcon: (color) => (
-            <Ionicons name="settings-outline" size={22} color={color} />
           ),
         }}
       />
