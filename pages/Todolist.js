@@ -57,12 +57,30 @@ const Todos = (props) => {
     }
   };
 
+  const deleteTask = (itemId) => {
+    console.log("Current Item Id: ", itemId);
+
+    entityRef
+      .doc(itemId)
+      .delete()
+      .then(() => {
+        console.log("Document successfully deleted!");
+      })
+      .catch((error) => {
+        console.error("Error removing document: ", error);
+      });
+  };
+
   const renderEntity = ({ item, index }) => {
     return (
-      <View style={styles.entityContainer}>
-        <Text style={styles.entityText}>
-          {index}. {item.text}
-        </Text>
+      <View>
+        <TouchableOpacity onPress={() => deleteTask(item.id)}>
+          <View style={styles.entityContainer}>
+            <Text style={styles.entityText}>
+              {index}. {item.text}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -143,10 +161,20 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   entityContainer: {
-    marginTop: 16,
-    borderBottomColor: "#cccccc",
-    borderBottomWidth: 1,
-    paddingBottom: 16,
+    // marginTop: 16,
+    // borderBottomColor: "grey",
+    // borderBottomWidth: 2,
+    // paddingBottom: 16,
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    backgroundColor: "white",
+    borderRadius: 20,
+    borderColor: "#C0C0C0",
+    borderWidth: 1,
+    maxWidth: 250,
+    width: 250,
+    shadowRadius: 10,
+    marginBottom: 20,
   },
   entityText: {
     fontSize: 20,
